@@ -145,13 +145,43 @@ func (c *S) loaderLoadRetry(wl *loaderWatcher, retry int) error {
 		return c.loaderLoadRetry(wl, retry+1)
 	}
 
+	// we load values from the previous and next loaders to save priorities
+	tmp := make(Values)
+	if len(c.WatcherLoaders) > 1 {
+		c.mut.Lock()
+		for o, lw := range c.WatcherLoaders {
+			if o == wl.order {
+				for k, v := range v {
+					tmp[k] = v
+				}
+			} else {
+				for k, v := range lw.values {
+					tmp[k] = v
+				}
+			}
+		}
+		c.mut.Unlock()
+	} else {
+		for k, v := range v {
+			tmp[k] = v
+		}
+	}
+
 	// we add the values to the store.
-	var updatedKeys, err = v.load(wl.values, c)
+	//todo плохая идея, будет состояние гонки
+	old := c.m.Load().(s)
+	oldValues := make(map[string]interface{}, len(old))
+	for k, v := range old {
+		oldValues[k] = v
+	}
+	var updatedKeys, err = tmp.load(oldValues, c)
 	if err != nil {
 		return err
 	}
 
+	c.mut.Lock()
 	wl.values = v
+	c.mut.Unlock()
 
 	// run key hooks
 	if len(updatedKeys) != 0 && c.keyHooks != nil {
@@ -225,6 +255,7 @@ func (c *S) watchLoader(wl *loaderWatcher, panics int) {
 						t.ObserveDuration()
 					}
 					if !wl.StopOnFailure() {
+						c.cfg.Logger.Get().Debug(err.Error())
 						continue
 					}
 					c.stop()

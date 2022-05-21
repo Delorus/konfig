@@ -192,7 +192,7 @@ type S struct {
 var (
 	c    *S
 	once sync.Once
-	mu sync.Mutex
+	mu   sync.Mutex
 )
 
 // Init initiates the global config store with the given Config cfg
@@ -231,6 +231,9 @@ func RegisterLoader(l Loader, loaderHooks ...func(Store) error) *ConfigLoader {
 // RegisterLoader registers a Loader l with a given Watcher w.
 func (c *S) RegisterLoader(l Loader, loaderHooks ...func(Store) error) *ConfigLoader {
 	var lw = c.newLoaderWatcher(l, NopWatcher{}, loaderHooks)
+	if len(c.WatcherLoaders) != 0 {
+		lw.order = len(c.WatcherLoaders)
+	}
 
 	c.WatcherLoaders = append(
 		c.WatcherLoaders,
@@ -248,6 +251,9 @@ func RegisterLoaderWatcher(lw LoaderWatcher, loaderHooks ...func(Store) error) *
 // RegisterLoaderWatcher registers a WatcherLoader to the config.
 func (c *S) RegisterLoaderWatcher(lw LoaderWatcher, loaderHooks ...func(Store) error) *ConfigLoader {
 	var lwatcher = c.newLoaderWatcher(lw, lw, loaderHooks)
+	if len(c.WatcherLoaders) != 0 {
+		lwatcher.order = len(c.WatcherLoaders)
+	}
 
 	c.WatcherClosers = append(c.WatcherClosers, lw)
 	c.WatcherLoaders = append(

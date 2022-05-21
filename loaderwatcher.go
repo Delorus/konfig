@@ -14,6 +14,7 @@ type loaderWatcher struct {
 	s           *S
 	metrics     *loaderMetrics
 	loaderHooks LoaderHooks
+	order       int
 }
 
 // NewLoaderWatcher creates a new LoaderWatcher from a Loader and a Watcher
