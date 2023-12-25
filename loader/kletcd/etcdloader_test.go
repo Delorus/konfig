@@ -7,14 +7,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coreos/etcd/mvcc/mvccpb"
 	"github.com/golang/mock/gomock"
 	"github.com/lalamove/konfig"
 	"github.com/lalamove/konfig/mocks"
 	"github.com/lalamove/konfig/parser"
 	"github.com/lalamove/konfig/watcher/kwpoll"
 	"github.com/stretchr/testify/require"
-	"go.etcd.io/etcd/clientv3"
+	"go.etcd.io/etcd/api/v3/mvccpb"
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 func newClient() *clientv3.Client {

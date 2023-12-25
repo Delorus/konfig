@@ -25,7 +25,7 @@ mocks:
 	mockgen -source ./loader/klvault/vaultloader.go -package mocks LogicalClient > ./mocks/logicalclient_mock.go	
 	mockgen -source ./parser/parser.go -package mocks Parser > ./mocks/parser_mock.go
 	mockgen -source ./loader/klhttp/httploader.go -package mocks Client > ./mocks/client_mock.go
-	mockgen -package mocks go.etcd.io/etcd/clientv3 KV > ./mocks/kv_mock.go
+	mockgen -package mocks go.etcd.io/etcd/client/v3 KV > ./mocks/kv_mock.go
 	mockgen -package mocks github.com/lalamove/nui/ncontext Contexter > ./mocks/contexter_mock.go
 	mockgen -source ./parser/parser.go -package mocks Parser > ./mocks/parser_mock.go
 	mockgen -source ./loader/klconsul/consulloader.go -package mocks ConsulKV > ./mocks/consulkv_mock.go
