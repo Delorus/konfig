@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/lalamove/konfig"
-	config "github.com/micro/go-micro/v2/config"
-	"github.com/micro/go-micro/v2/config/source/memory"
 	"github.com/spf13/viper"
+	"go-micro.dev/v5/config"
+	"go-micro.dev/v5/config/source/memory"
 )
 
 func BenchmarkGetKonfig(b *testing.B) {

@@ -6,7 +6,7 @@ import (
 	"github.com/lalamove/konfig"
 	"github.com/lalamove/konfig/parser"
 	"github.com/lalamove/konfig/parser/kpmap"
-	yaml "gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v3"
 )
 
 // Parser is the YAML Parser it implements parser.Parser
